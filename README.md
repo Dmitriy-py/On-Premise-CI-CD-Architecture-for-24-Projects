@@ -1,5 +1,4 @@
-
-# DevOps ARC: Unified Enterprise CI/CD Cluster (30+ Projects)
+# Unified Enterprise CI/CD Cluster (30+ Projects)
 
 **CLASSIFICATION:** INTERNAL - PROPRIETARY  
 **ARCHITECTURE:** Native GitHub Actions Runner Controller (ARC)  
@@ -9,7 +8,7 @@
 
 ## 1. Концепция проекта
 
-**DevOps ARC** — это высокопроизводительная инфраструктурная прослойка, которая переносит выполнение всех CI/CD процессов из облака GitHub (Hosted Runners) в наш выделенный **Kubernetes-кластер**. 
+**DevFlow ARC** — это высокопроизводительная инфраструктурная прослойка, которая переносит выполнение всех CI/CD процессов из облака GitHub (Hosted Runners) в наш выделенный **Kubernetes-кластер**. 
 
 Вместо оплаты за каждую минуту работы в GitHub, мы используем **единый пул вычислительных мощностей** для всех 30+ репозиториев. Это позволяет достичь максимальной плотности упаковки задач и снизить операционные расходы на 70-80%.
 
@@ -72,7 +71,6 @@
 ---
 **STATUS:** Ready for Deployment  
 **OWNER:** DevOps Infrastructure Team
-
 
 # Roadmap: Реализация DevFlow ARC (GitHub + Kubernetes)
 
@@ -153,6 +151,64 @@ ARC — это «мозг» системы, который живет внутр
 *   Сама их «увольняет», когда работа закончена.
 *   Использует самые дешевые ресурсы (Spot) и работает на сверхскоростях за счет локального кэша.
 
+# [CONFIDENTIAL] Minimal Hardware Footprint: DevFlow ARC
 
+**PROJECT:** DevFlow ARC (GitHub CI/CD Consolidation)  
+**TARGET:** 30+ Active Repositories  
+**OPTIMIZATION:** Lean Infrastructure / Spot-Instance Driven
 
+---
+
+## 1. Management Layer (Static Infrastructure)
+Эти ресурсы работают 24/7 для обеспечения связи с GitHub API и управления очередями задач.
+
+| Component | Target VM Config | Resources | Purpose |
+| :--- | :--- | :--- | :--- |
+| **K8s Master / ARC** | Standard Instance | 4 vCPU / 8 GB RAM | Orchestration, ARC Controller, Webhook Server |
+| **System Disk** | SSD / NVMe | 50 GB | Logs, OS, K8s System components |
+| **Network** | Static IP / LB | 100 Mbps | Incoming GitHub Webhooks & API calls |
+
+---
+
+## 2. Execution Layer (Elastic Infrastructure)
+Пул для запуска задач (Jobs). Масштабируется от 0 в зависимости от нагрузки во всех 30 проектах.
+
+| Component | Instance Policy | VM Config | Scaling Limits |
+| :--- | :--- | :--- | :--- |
+| **CI/CD Runners** | **Spot / Preemptible** | 4 vCPU / 16 GB RAM | **Min: 0** / **Max: 5** Nodes |
+
+*   **Почему 4/16?** Это оптимальный профиль для параллельной сборки TypeScript/TSX и запуска Python-тестов.
+*   **Spot Policy:** Экономия до 80%. При прерывании узла ARC автоматически переназначает задачу на новый узел.
+
+---
+
+## 3. Storage Layer (Shared Services)
+Централизованное хранилище для ускорения всех 30 проектов.
+
+| Component | Technology | Volume | Note |
+| :--- | :--- | :--- | :--- |
+| **Global Cache** | MinIO (S3-compat) | 100 GB NVMe | Хранение `node_modules`, `pip_cache` и Docker layers |
+| **Local Registry** | Docker Registry | Included in Cache | Ускоряет Pull базовых образов внутри кластера |
+
+---
+
+## 4. Summary of Minimum Consumption (SLA 99.0)
+
+Для обслуживания **30+ проектов** минимальный порог ресурсов составляет:
+
+1.  **Постоянный минимум (Always-on):**
+    *   1 VM (4 vCPU, 8 GB RAM)
+    *   150 GB Total Storage (NVMe/SSD)
+    *   1 Load Balancer
+2.  **Переменный максимум (Peak Load):**
+    *   До 20 vCPU и 80 GB RAM суммарно (распределено по Spot-узлам).
+    *   *Автоматически отключается при отсутствии задач.*
+
+## 5. Cost-Effectiveness Ratio (Efficiency)
+
+*   **System Overhead:** < 10% (ресурсы, потребляемые самой системой управления).
+*   **Performance:** Каждый билд получает гарантированные 2-4 vCPU (в 2 раза мощнее стандартных GitHub Runners).
+*   **Consolidation Benefit:** Вместо 30 разрозненных платных подписок — один эластичный кластер, работающий по фактическому потреблению.
+
+---
 
