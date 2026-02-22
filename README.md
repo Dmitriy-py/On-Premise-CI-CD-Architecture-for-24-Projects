@@ -72,7 +72,7 @@
 **STATUS:** Ready for Deployment  
 **OWNER:** DevOps Infrastructure Team
 
-# Roadmap: Реализация DevFlow ARC (GitHub + Kubernetes)
+# Roadmap: Реализация (GitHub + Kubernetes)
 
 Этот документ описывает технические шаги по развертыванию единого CI/CD центра для 30+ репозиториев.
 
