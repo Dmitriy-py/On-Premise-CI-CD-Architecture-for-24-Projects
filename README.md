@@ -8,7 +8,7 @@
 
 ## 1. Концепция проекта
 
-**Dev ARC** — это высокопроизводительная инфраструктурная прослойка, которая переносит выполнение всех CI/CD процессов из облака GitHub (Hosted Runners) в наш выделенный **Kubernetes-кластер**. 
+**Это высокопроизводительная инфраструктурная прослойка, которая переносит выполнение всех CI/CD процессов из облака GitHub (Hosted Runners) в наш выделенный **Kubernetes-кластер**. 
 
 Вместо оплаты за каждую минуту работы в GitHub, мы используем **единый пул вычислительных мощностей** для всех 30+ репозиториев. Это позволяет достичь максимальной плотности упаковки задач и снизить операционные расходы на 70-80%.
 
@@ -153,7 +153,7 @@ ARC — это «мозг» системы, который живет внутр
 
 # [CONFIDENTIAL] Minimal Hardware Footprint: DevFlow ARC
 
-**PROJECT:** DevFlow ARC (GitHub CI/CD Consolidation)  
+**PROJECT:** (GitHub CI/CD Consolidation)  
 **TARGET:** 30+ Active Repositories  
 **OPTIMIZATION:** Lean Infrastructure / Spot-Instance Driven
 
